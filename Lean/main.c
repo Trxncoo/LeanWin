@@ -1,32 +1,26 @@
 #include "Lean.h"
 
 int _tmain(int argc, TCHAR* argv[]) {
-	ProcessInfo pi;
-	ExitCode waitCode;
-
 	LeanInit();
 
-	if (!processCreate(argv[1], &pi)) {
-		ErrorLog(_T("Error creating process\n"));
+	KeyHandle keyHandle;
+	ErrorCode createKeyCode = registryOpenKey(&keyHandle, _T("Teste123\\ff\\"));
+
+	if (createKeyCode != ERROR_SUCCESS) {
+		ErrorLog(_T("Error"));
 		processExit(1);
 	}
 
-	waitCode = processWait(pi.hProcess);
+	KeyDataType dataType;
+	
+	TCHAR str[200];
 
-	if (waitCode == WAIT_FAILED) {
-		ErrorLog(_T("Wait Failed"));
-		processExit(1);
-	}
+	KeyDataSize dataSize;
 
-	processGetExitCode(pi.hProcess, &waitCode);
+	registryQueryValue(keyHandle, _T("codiso"), &dataType, (pKeyDataValue) str, &dataSize);
 
-	_tprintf(_T("%d\n"), waitCode);
+	_tprintf(_T("%s\n"), str);
 
-	processCloseHandle(pi.hProcess);
-
-	ErrorLog(_T("End"));
-
-	_tprintf(_T("%d\n"), processGetId());
-
-	processExit(1);
+	_tprintf(_T("Key Created Successfully\n"));
+	processExit(0);
 }

@@ -4,14 +4,14 @@
 
 Bool processCreate(pStr commandLine, pProcessInfo pi);
 
-ExitCode processWait(Handle processHandle);
+ExitCode processWait(ProcessHandle processHandle);
 
 void processExit(uInt exitCode);
 
-Bool processGetExitCode(Handle processHandle, pExitCode exitCode);
+Bool processGetExitCode(ProcessHandle processHandle, pExitCode exitCode);
 
-Bool processCloseHandle(Handle processHandle);
+Bool processCloseHandle(ProcessHandle processHandle);
 
-Handle processGetPseudoHandle();
+ProcessHandle processGetPseudoHandle();
 
 ProcessId processGetId();

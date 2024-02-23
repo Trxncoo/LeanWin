@@ -1,6 +1,5 @@
 #include "LeanProcesses.h"
 
-
 Bool processCreate(pStr commandLine, pProcessInfo pi) {
 	StartupInfo si;
 
@@ -10,7 +9,7 @@ Bool processCreate(pStr commandLine, pProcessInfo pi) {
 	return CreateProcess(NULL, commandLine, NULL, NULL, FALSE, 0, NULL, NULL, &si, pi);
 }
 
-ExitCode processWait(Handle processHandle) {
+ExitCode processWait(ProcessHandle processHandle) {
 	return WaitForSingleObject(processHandle, INFINITE);
 }
 
@@ -18,15 +17,15 @@ void processExit(uInt exitCode) {
 	ExitProcess(exitCode);
 }
 
-Bool processGetExitCode(Handle processHandle, pExitCode exitCode) {
+Bool processGetExitCode(ProcessHandle processHandle, pExitCode exitCode) {
 	return GetExitCodeProcess(processHandle, exitCode);
 }
 
-Bool processCloseHandle(Handle processHandle) {
+Bool processCloseHandle(ProcessHandle processHandle) {
 	return CloseHandle(processHandle);
 }
 
-Handle processGetPseudoHandle() {
+ProcessHandle processGetPseudoHandle() {
 	return GetCurrentProcess();
 }
 
