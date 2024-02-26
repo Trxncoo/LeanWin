@@ -2,7 +2,7 @@
 
 #include "LeanTypes.h"
 
-// if key exists, returns NULL and doesn't open it
+// if key exists, returns !ERROR_SUCCESS and doesn't open it
 ErrorCode registryCreateKey(pKeyHandle keyHandle, pStr subKey);
 
 ErrorCode registryDeleteKey(pStr subKey);

@@ -130,6 +130,7 @@
     <ClCompile Include="Lean.c" />
     <ClCompile Include="LeanProcesses.c" />
     <ClCompile Include="LeanRegistry.c" />
+    <ClCompile Include="LeanThreads.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +138,7 @@
     <ClInclude Include="LeanProcesses.h" />
     <ClInclude Include="LeanRegistry.h" />
     <ClInclude Include="LeanTypes.h" />
+    <ClInclude Include="LeanThreads.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

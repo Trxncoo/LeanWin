@@ -6,27 +6,39 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-typedef LSTATUS ErrCode;
 typedef LPTSTR pStr;
 typedef TCHAR Str;
+
 typedef PROCESS_INFORMATION ProcessInfo;
 typedef LPPROCESS_INFORMATION pProcessInfo;
+
+typedef struct ThreadInfo ThreadInfo;
+typedef ThreadInfo* pThreadInfo;
+
 typedef STARTUPINFO StartupInfo;
-typedef DWORD ExitCode;
+
+typedef DWORD Dword, ExitCode, ProcessId, ThreadId, KeyDataType, KeyDataSize;
+typedef LPDWORD pExitCode, pKeyDataSize, pKeyDataType, pThreadId;
+
 typedef LSTATUS ErrorCode;
-typedef LPDWORD pExitCode;
-typedef DWORD ProcessId;
-typedef HANDLE ProcessHandle;
+typedef HANDLE ProcessHandle, ThreadHandle;
+
+typedef LPTHREAD_START_ROUTINE ThreadFunction;
+typedef void Void;
+typedef LPVOID pVoid;
+
 typedef HKEY KeyHandle;
-typedef DWORD KeyDataType;
-typedef LPDWORD pKeyDataSize;
-typedef LPDWORD pKeyDataType;
+typedef PHKEY pKeyHandle;
 typedef BYTE KeyDataValue;
 typedef LPBYTE pKeyDataValue;
-typedef DWORD KeyDataSize;
-typedef PHKEY pKeyHandle;
+
 typedef BOOL Bool;
 typedef UINT uInt;
+
+struct ThreadInfo {
+	ThreadHandle threadHandle;
+	ThreadId threadId;
+};
 
 #define True 1;
 #define False 0;

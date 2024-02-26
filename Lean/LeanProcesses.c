@@ -13,7 +13,7 @@ ExitCode processWait(ProcessHandle processHandle) {
 	return WaitForSingleObject(processHandle, INFINITE);
 }
 
-void processExit(uInt exitCode) {
+Void processExit(uInt exitCode) {
 	ExitProcess(exitCode);
 }
 
@@ -25,10 +25,10 @@ Bool processCloseHandle(ProcessHandle processHandle) {
 	return CloseHandle(processHandle);
 }
 
-ProcessHandle processGetPseudoHandle() {
+ProcessHandle processGetPseudoHandle(Void) {
 	return GetCurrentProcess();
 }
 
-ProcessId processGetId() {
+ProcessId processGetId(Void) {
 	return GetCurrentProcessId();
 }

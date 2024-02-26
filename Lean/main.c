@@ -1,9 +1,15 @@
 #include "Lean.h"
 
 //#define PROCESS
-#define REGISTRY
+//#define REGISTRY
+#define THREAD
 
-int _tmain(int argc, TCHAR* argv[]) {
+Dword WINAPI threadFunction(pVoid lpParam) {
+	_tprintf(_T("Sou uma thread\n"));
+	threadExit(1);
+}
+
+int _tmain(int argc, pStr argv[]) {
 	LeanInit();
 
 #ifdef PROCESS
@@ -76,5 +82,30 @@ int _tmain(int argc, TCHAR* argv[]) {
 	registryDeleteKeyTree(key);	
 	registryCloseKey(keyHandle);
 	processExit(0);
+#endif
+
+#ifdef THREAD
+	ThreadInfo threadInfo;
+	ErrorCode threadExit;
+
+	if (threadCreate(threadFunction, NULL, &threadInfo)) {
+		ErrorLog(_T("Thread Creation Failed"));
+		processExit(1);
+	}
+
+	threadWait(threadInfo.threadHandle);
+
+	threadGetExitCode(threadInfo.threadHandle, &threadExit);
+
+	_tprintf(_T("Thread exit code is <%d>\n"), threadExit);
+
+	if (!threadCloseHandle(threadInfo.threadHandle)) {
+		ErrorLog(_T("Error closing thread handle"));
+		processExit(1);
+	}
+
+	_tprintf(_T("Thread Created successfully\n"));
+	processExit(1);
+
 #endif
 }

@@ -27,6 +27,9 @@
     <ClCompile Include="LeanRegistry.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LeanThreads.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lean.h">
@@ -39,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LeanRegistry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LeanThreads.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
