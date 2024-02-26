@@ -4,9 +4,19 @@
 //#define REGISTRY
 #define THREAD
 
-Dword WINAPI threadFunction(pVoid lpParam) {
-	_tprintf(_T("Sou uma thread\n"));
-	threadExit(1);
+int a = 2;
+int b = 1;
+
+Dword WINAPI threadFunction(pVoid args) {
+	a++;
+	_tprintf(_T("A\n"));
+	threadExit(a);
+}
+
+Dword WINAPI threadFunction2(pVoid args) {
+	b++;
+	_tprintf(_T("B\n"));
+	threadExit(b);
 }
 
 int _tmain(int argc, pStr argv[]) {
@@ -85,23 +95,37 @@ int _tmain(int argc, pStr argv[]) {
 #endif
 
 #ifdef THREAD
-	ThreadInfo threadInfo;
-	ErrorCode threadExit;
+	ThreadInfo threadInfo[2];
+	ErrorCode threadExit = 0;
 
-	if (threadCreate(threadFunction, NULL, &threadInfo)) {
-		ErrorLog(_T("Thread Creation Failed"));
+	if (!threadCreate(threadFunction, NULL, &threadInfo[0])) {
+		ErrorLog(_T("Thread Creation failed"));
 		processExit(1);
 	}
 
-	threadWait(threadInfo.threadHandle);
-
-	threadGetExitCode(threadInfo.threadHandle, &threadExit);
-
-	_tprintf(_T("Thread exit code is <%d>\n"), threadExit);
-
-	if (!threadCloseHandle(threadInfo.threadHandle)) {
-		ErrorLog(_T("Error closing thread handle"));
+	if (!threadCreate(threadFunction2, NULL, &threadInfo[1])) {
+		ErrorLog(_T("Thread Creation failed"));
+		threadCloseHandle(threadInfo[1].threadHandle);
 		processExit(1);
+	}
+
+	if (threadWaitAll(2, threadInfo) == WAIT_ALLOCATION_FAILED) {
+		ErrorLog(_T("Thread Waiting failed"));
+		processExit(1);
+	}
+
+	_tprintf(_T("C\n"));
+
+	for (int i = 0; i < 2; ++i) {
+		threadGetExitCode(threadInfo[i].threadHandle, &threadExit);
+		_tprintf(_T("Thread exit code is <%d:%d>\n"), i, threadExit);
+	}
+
+	for (int i = 0; i < 2; ++i) {
+		if (!threadCloseHandle(threadInfo[i].threadHandle)) {
+			ErrorLog(_T("Error closing thread handle"));
+			processExit(1);
+		}
 	}
 
 	_tprintf(_T("Thread Created successfully\n"));

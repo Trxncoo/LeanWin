@@ -17,3 +17,9 @@ Bool threadGetExitCode(ThreadHandle threadHandle, pExitCode exitCode);
 ThreadHandle threadGetPseudoHandle(Void);
 
 ThreadId threadGetId(Void);
+
+Dword threadWaitAll(Dword count, pThreadInfo threadInfos);
+
+Dword threadWaitOne(Dword count, pThreadInfo threadInfos);
+
+pThreadHandle threadInfoToHandles(Dword count, pThreadInfo threadInfo);

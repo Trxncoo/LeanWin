@@ -22,6 +22,7 @@ typedef LPDWORD pExitCode, pKeyDataSize, pKeyDataType, pThreadId;
 
 typedef LSTATUS ErrorCode;
 typedef HANDLE ProcessHandle, ThreadHandle;
+typedef LPHANDLE pThreadHandle;
 
 typedef LPTHREAD_START_ROUTINE ThreadFunction;
 typedef void Void;
@@ -40,5 +41,4 @@ struct ThreadInfo {
 	ThreadId threadId;
 };
 
-#define True 1;
-#define False 0;
+#define WAIT_ALLOCATION_FAILED (WAIT_FAILED - 1)
