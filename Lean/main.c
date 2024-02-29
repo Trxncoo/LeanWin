@@ -1,8 +1,8 @@
 #include "Lean.h"
 
 //#define PROCESS
-//#define REGISTRY
-#define THREAD
+#define REGISTRY
+//#define THREAD
 
 int a = 2;
 int b = 1;
@@ -58,14 +58,12 @@ int _tmain(int argc, pStr argv[]) {
 	pStr key = _T("12345678909876543212345\\1");
 	pStr valueName = _T("Value1");
 	KeyHandle keyHandle;
-	KeyDataType dataType = REG_DWORD;
-	KeyDataType dataTypeQueried;
-	DWORD dataValue = 20;
-	DWORD dataQueried;
-	KeyDataSize dataSize = sizeof(DWORD);
-	KeyDataSize dataSizeQueried;
-	ErrorCode createKeyCode = registryCreateKey(&keyHandle, key);
+	DWORD dataValue = 1023;
+	RegistryData registryData;
+	RegistryData newData;
+	ErrorCode createKeyCode;
 
+	createKeyCode = registryCreateKey(&keyHandle, key);
 	if (createKeyCode != ERROR_SUCCESS) {
 		ErrorLog(_T("Error Creating the Key"));
 		processExit(1);
@@ -73,7 +71,9 @@ int _tmain(int argc, pStr argv[]) {
 
 	_tprintf(_T("Key Created\n"));
 
-	if (registrySetValue(keyHandle, valueName, dataType, (pKeyDataValue)&dataValue, dataSize) != ERROR_SUCCESS) {
+	registryFill(&registryData, &dataValue, REG_DWORD, sizeof(DWORD));
+
+	if (registrySetValue(keyHandle, valueName, &registryData) != ERROR_SUCCESS) {
 		ErrorLog(_T("Error Setting a Value"));
 		registryCloseKey(keyHandle);
 		processExit(1);
@@ -81,13 +81,13 @@ int _tmain(int argc, pStr argv[]) {
 
 	_tprintf(_T("Value set\n"));
 
-	if (registryQueryValue(keyHandle, valueName, &dataTypeQueried, (pKeyDataValue)&dataQueried, &dataSizeQueried) != ERROR_SUCCESS) {
+	if (registryQueryValue(keyHandle, valueName, &newData) != ERROR_SUCCESS) {
 		ErrorLog(_T("Error Querying a Value"));
 		registryCloseKey(keyHandle);
 		processExit(1);
 	}
 
-	_tprintf(_T("The Key <%s> has the name <%s> with the value: <%d>\n"), key, valueName, dataQueried);
+	_tprintf(_T("The Key <%s> has the name <%s> with the value: <%d>\n"), key, valueName, newData.keyDataValue);
 
 	registryDeleteKeyTree(key);	
 	registryCloseKey(keyHandle);

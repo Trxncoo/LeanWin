@@ -2,7 +2,23 @@
 
 #include "LeanTypes.h"
 
-// if key exists, returns !ERROR_SUCCESS and doesn't open it
+typedef struct RegistryData RegistryData;
+typedef struct RegistryData* pRegistryData;
+
+struct RegistryData {
+	KeyDataType keyDataType;
+	pVoid keyDataValue;
+	KeyDataSize keyDataSize;
+};
+
+Void registrySetDataType(pRegistryData registryData, KeyDataType keyDataType);
+
+Void registrySetDataSize(pRegistryData registryData, KeyDataSize keyDataSize);
+
+Void registrySetDataValue(pRegistryData registryData, pVoid keyDataValue);
+
+Void registryFill(pRegistryData registryData, pVoid keyDataValue, KeyDataType keyDataType, KeyDataSize keyDataSize);
+
 ErrorCode registryCreateKey(pKeyHandle keyHandle, pStr subKey);
 
 ErrorCode registryDeleteKey(pStr subKey);
@@ -13,9 +29,9 @@ ErrorCode registryOpenKey(pKeyHandle keyHandle, pStr subKey);
 
 ErrorCode registryCloseKey(KeyHandle keyHandle);
 
-ErrorCode registrySetValue(KeyHandle keyHandle, pStr valueName, KeyDataType keyDataType, pKeyDataValue keyDataValue, KeyDataSize keyDataSize);
+ErrorCode registrySetValue(KeyHandle keyHandle, pStr valueName, pRegistryData registryData);
 
-ErrorCode registryQueryValue(KeyHandle keyHandle, pStr valueName, pKeyDataType keyDataType, pKeyDataValue keyDataValue, pKeyDataSize keyDataSize);
+ErrorCode registryQueryValue(KeyHandle keyHandle, pStr valueName, pRegistryData registryData);
 
 ErrorCode registryDeleteValue(KeyHandle keyHandle, pStr valueName);
 

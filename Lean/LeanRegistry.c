@@ -1,5 +1,23 @@
 #include "LeanRegistry.h"
 
+Void registrySetDataType(pRegistryData registryData, KeyDataType keyDataType) {
+	registryData->keyDataType = keyDataType;
+}
+
+Void registrySetDataSize(pRegistryData registryData, KeyDataSize keyDataSize) {
+	registryData->keyDataSize = keyDataSize;
+}
+
+Void registrySetDataValue(pRegistryData registryData, pVoid keyDataValue) {
+	registryData->keyDataValue = keyDataValue;
+}
+
+Void registryFill(pRegistryData registryData, pVoid keyDataValue, KeyDataType keyDataType, KeyDataSize keyDataSize) {
+	registrySetDataValue(registryData, keyDataValue);
+	registrySetDataType(registryData, keyDataType);
+	registrySetDataSize(registryData, keyDataSize);
+}
+
 ErrorCode registryCreateKey(pKeyHandle keyHandle, pStr subKey) {
 	ExitCode state;
 	ErrorCode keyState = RegCreateKeyEx(HKEY_CURRENT_USER, subKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, keyHandle, &state);
@@ -40,12 +58,43 @@ ErrorCode registryCloseKey(KeyHandle keyHandle) {
 	return RegCloseKey(keyHandle);
 }
 
-ErrorCode registrySetValue(KeyHandle keyHandle, pStr valueName, KeyDataType keyDataType, pKeyDataValue keyDataValue, KeyDataSize keyDataSize) {
-	return RegSetValueEx(keyHandle, valueName, 0, keyDataType, keyDataValue, keyDataSize);
+ErrorCode registrySetValue(KeyHandle keyHandle, pStr valueName, pRegistryData registryData) {
+	return RegSetValueEx(keyHandle, valueName, 0, registryData->keyDataType, registryData->keyDataValue, registryData->keyDataSize);
 }
 
-ErrorCode registryQueryValue(KeyHandle keyHandle, pStr valueName, pKeyDataType keyDataType, pKeyDataValue keyDataValue, pKeyDataSize keyDataSize) {
-	return RegQueryValueEx(keyHandle, valueName, 0, keyDataType, keyDataValue, keyDataSize);
+ErrorCode registryQueryValue(KeyHandle keyHandle, pStr valueName, pRegistryData registryData) {
+	KeyDataType dataType;
+	KeyDataSize dataSize = 0;
+	ErrorCode queryResult;
+	
+	queryResult = RegQueryValueEx(keyHandle, valueName, 0, &dataType, NULL, &dataSize);
+	if (queryResult != ERROR_SUCCESS) {
+		return queryResult;
+	}
+
+	if (dataType != REG_SZ) {
+		queryResult = RegQueryValueEx(keyHandle, valueName, 0, &dataType, (pKeyDataValue) &registryData->keyDataValue, &dataSize);
+		if (queryResult != ERROR_SUCCESS) {
+			return queryResult;
+		}
+	}
+	else {
+		registryData->keyDataValue = malloc(dataSize);
+		if (registryData->keyDataValue == NULL) {
+			return ERROR_NOT_ENOUGH_MEMORY;
+		}
+
+		queryResult = RegQueryValueEx(keyHandle, valueName, 0, &dataType, (pKeyDataValue)registryData->keyDataValue, &dataSize);
+		if (queryResult != ERROR_SUCCESS) {
+			free(registryData->keyDataValue);
+			return queryResult;
+		}
+	}
+
+	registryData->keyDataSize = dataSize;
+	registryData->keyDataType = dataType;
+
+	return ERROR_SUCCESS;
 }
 
 ErrorCode registryDeleteValue(KeyHandle keyHandle, pStr valueName) {
@@ -65,7 +114,7 @@ pStr registryBaseKey(pStr subKey) {
 
 	keyBuffer = (pStr)malloc((length + 1) * sizeof(TCHAR));
 	if (keyBuffer == NULL) {
-		return !ERROR_SUCCESS;
+		return ERROR_NOT_ENOUGH_MEMORY;
 	}
 
 	_tcsnccpy_s(keyBuffer, length + 1, subKey, length);
