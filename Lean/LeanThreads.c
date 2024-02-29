@@ -61,7 +61,7 @@ pThreadHandle threadInfoToHandles(Dword count, pThreadInfo threadInfo) {
 		return NULL;
 	}
 
-	for (int i = 0; i < count; ++i) {
+	for (uInt i = 0; i < count; ++i) {
 		threadHandles[i] = threadInfo[i].threadHandle;
 	}
 
@@ -74,7 +74,7 @@ Dword threadWaitAll(Dword count, pThreadInfo threadInfos) {
 
 	threadHandles = threadInfoToHandles(count, threadInfos);
 	if (threadHandles == NULL) {
-		return WAIT_ALLOCATION_FAILED;
+		return ERROR_NOT_ENOUGH_MEMORY;
 	}
 
 	waitCode = WaitForMultipleObjects(count, threadHandles, 1, INFINITE);
@@ -90,7 +90,7 @@ Dword threadWaitOne(Dword count, pThreadInfo threadInfos) {
 
 	threadHandles = threadInfoToHandles(count, threadInfos);
 	if (threadHandles == NULL) {
-		return WAIT_ALLOCATION_FAILED;
+		return ERROR_NOT_ENOUGH_MEMORY;
 	}
 
 	waitCode = WaitForMultipleObjects(count, threadHandles, 0, INFINITE);
@@ -100,3 +100,19 @@ Dword threadWaitOne(Dword count, pThreadInfo threadInfos) {
 	return waitCode;
 }
 
+Void threadMutexFill(pMutexInfo mutexInfo, pStr mutexName) {
+	_tcscpy_s(mutexInfo->mutexName, MAX_PATH, mutexName);
+}
+
+Bool threadMutexCreate(pMutexInfo mutexInfo, Dword mutexFlag) {
+	MutexHandle mutexHandle;
+
+	mutexHandle = CreateMutexEx(NULL, mutexInfo->mutexName, mutexFlag, EVENT_ALL_ACCESS);
+	if (mutexHandle == NULL) {
+		return 0;
+	}
+
+	mutexInfo->mutexHandle = mutexHandle;
+
+	return 1;
+}

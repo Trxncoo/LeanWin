@@ -23,3 +23,7 @@ Dword threadWaitAll(Dword count, pThreadInfo threadInfos);
 Dword threadWaitOne(Dword count, pThreadInfo threadInfos);
 
 pThreadHandle threadInfoToHandles(Dword count, pThreadInfo threadInfo);
+
+Void threadMutexFill(pMutexInfo mutexInfo, pStr mutexName);
+
+Bool threadMutexCreate(pMutexInfo mutexInfo, Dword mutexFlag);

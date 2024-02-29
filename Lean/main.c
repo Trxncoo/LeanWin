@@ -1,22 +1,69 @@
 #include "Lean.h"
 
 //#define PROCESS
-#define REGISTRY
-//#define THREAD
+//#define REGISTRY
+#define THREAD
 
-int a = 2;
-int b = 1;
+typedef struct _ThreadPacket ThreadPacket;
+typedef struct _ThreadPacket* pThreadPacket;
 
-Dword WINAPI threadFunction(pVoid args) {
-	a++;
-	_tprintf(_T("A\n"));
-	threadExit(a);
+struct _ThreadPacket{
+	Int number;
+	Int currentEvenSum;
+	Int currentPrimeSum;
+};
+
+Void threadPacketFill(pThreadPacket threadPacket, Int number, Int currentEvenSum, Int currentPrimeSum) {
+	threadPacket->number = number;
+	threadPacket->currentEvenSum = currentEvenSum;
+	threadPacket->currentPrimeSum = currentPrimeSum;
 }
 
-Dword WINAPI threadFunction2(pVoid args) {
-	b++;
-	_tprintf(_T("B\n"));
-	threadExit(b);
+Dword WINAPI threadEvenFunction(pVoid args) {
+	Int evenCount = 0;
+	pThreadPacket threadPacket = (pThreadPacket)args;
+
+	for (Int i = 1; i <= threadPacket->number; ++i) {
+		if (i % 2 == 0) {
+			threadPacket->currentEvenSum += i;
+			++evenCount;
+
+			if (evenCount % 200 == 0) {
+				Sleep(1000);
+			}
+		}
+	}
+		
+	threadExit(1);
+}
+
+DWORD IsPrime(DWORD num) {
+	if (num <= 1)  
+		return 0;
+
+	for (DWORD i = 2; i < num; i++) {
+		if (num % i == 0) {
+			return 0;
+		}
+	}
+	return 1; // se devolver 1 é numero primo
+}
+
+Dword WINAPI threadPrimeFunction(pVoid args) {
+	Int primeCount = 0;
+	pThreadPacket threadPacket = (pThreadPacket)args;
+
+	for (Int i = 1; i <= threadPacket->number; ++i) {
+		if (IsPrime(i)) {
+			threadPacket->currentPrimeSum += i;
+			++primeCount;
+
+			if (primeCount % 15 == 0)
+				Sleep(1000);
+		}
+	}
+
+	threadExit(1);
 }
 
 int _tmain(int argc, pStr argv[]) {
@@ -97,38 +144,52 @@ int _tmain(int argc, pStr argv[]) {
 #ifdef THREAD
 	ThreadInfo threadInfo[2];
 	ErrorCode threadExit = 0;
+	ThreadPacket threadPacket;
 
-	if (!threadCreate(threadFunction, NULL, &threadInfo[0])) {
+	threadPacketFill(&threadPacket, 1000, 0, 0);
+
+	if (!threadCreate(threadEvenFunction, &threadPacket, &threadInfo[0])) {
 		ErrorLog(_T("Thread Creation failed"));
 		processExit(1);
 	}
 
-	if (!threadCreate(threadFunction2, NULL, &threadInfo[1])) {
+	if (!threadCreate(threadPrimeFunction, &threadPacket, &threadInfo[1])) {
 		ErrorLog(_T("Thread Creation failed"));
 		threadCloseHandle(threadInfo[1].threadHandle);
 		processExit(1);
 	}
 
-	if (threadWaitAll(2, threadInfo) == WAIT_ALLOCATION_FAILED) {
+	Dword objectExit;
+
+	objectExit = threadWaitOne(2, threadInfo);
+	if (objectExit == ERROR_NOT_ENOUGH_MEMORY) {
 		ErrorLog(_T("Thread Waiting failed"));
 		processExit(1);
 	}
 
-	_tprintf(_T("C\n"));
+	if (objectExit == WAIT_OBJECT_0) {
+		_tprintf(_T("Even Sum: <%d>\n"), threadPacket.currentEvenSum);
+		threadWait(threadInfo[1].threadHandle);
+	}
+	if (objectExit == WAIT_OBJECT_0 + 1) {
+		_tprintf(_T("Prime Sum: <%d>\n"), threadPacket.currentPrimeSum);
+		threadWait(threadInfo[0].threadHandle);
+	}
+	
 
-	for (int i = 0; i < 2; ++i) {
+	for (Int i = 0; i < 2; ++i) {
 		threadGetExitCode(threadInfo[i].threadHandle, &threadExit);
 		_tprintf(_T("Thread exit code is <%d:%d>\n"), i, threadExit);
 	}
 
-	for (int i = 0; i < 2; ++i) {
+	for (Int i = 0; i < 2; ++i) {
 		if (!threadCloseHandle(threadInfo[i].threadHandle)) {
 			ErrorLog(_T("Error closing thread handle"));
 			processExit(1);
 		}
 	}
 
-	_tprintf(_T("Thread Created successfully\n"));
+	_tprintf(_T("Final sum is: <%d:%d>\n"), threadPacket.currentPrimeSum, threadPacket.currentEvenSum);
 	processExit(1);
 
 #endif

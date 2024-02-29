@@ -1,8 +1,6 @@
 #include "Lean.h"
 
-#include "Lean.h"
-
-void LeanInit() {
+Void LeanInit() {
 #ifdef UNICODE
 	_setmode(_fileno(stdin), _O_WTEXT);
 	_setmode(_fileno(stdout), _O_WTEXT);
