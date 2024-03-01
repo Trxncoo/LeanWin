@@ -11,12 +11,14 @@ struct _ThreadPacket{
 	Int number;
 	Int currentEvenSum;
 	Int currentPrimeSum;
+	pMutexInfo mutexInfo;
 };
 
-Void threadPacketFill(pThreadPacket threadPacket, Int number, Int currentEvenSum, Int currentPrimeSum) {
+Void threadPacketFill(pThreadPacket threadPacket, Int number, Int currentEvenSum, Int currentPrimeSum, pMutexInfo mutexInfo) {
 	threadPacket->number = number;
 	threadPacket->currentEvenSum = currentEvenSum;
 	threadPacket->currentPrimeSum = currentPrimeSum;
+	threadPacket->mutexInfo = mutexInfo;
 }
 
 Dword WINAPI threadEvenFunction(pVoid args) {
@@ -27,13 +29,9 @@ Dword WINAPI threadEvenFunction(pVoid args) {
 		if (i % 2 == 0) {
 			threadPacket->currentEvenSum += i;
 			++evenCount;
-
-			if (evenCount % 200 == 0) {
-				Sleep(1000);
-			}
 		}
 	}
-		
+
 	threadExit(1);
 }
 
@@ -57,9 +55,6 @@ Dword WINAPI threadPrimeFunction(pVoid args) {
 		if (IsPrime(i)) {
 			threadPacket->currentPrimeSum += i;
 			++primeCount;
-
-			if (primeCount % 15 == 0)
-				Sleep(1000);
 		}
 	}
 
@@ -145,8 +140,13 @@ int _tmain(int argc, pStr argv[]) {
 	ThreadInfo threadInfo[2];
 	ErrorCode threadExit = 0;
 	ThreadPacket threadPacket;
+	MutexInfo mutexInfo;
 
-	threadPacketFill(&threadPacket, 1000, 0, 0);
+	_tcscpy_s(mutexInfo.name, MAX_PATH - 1, _T("Nome"));
+
+	mutexCreate(&mutexInfo);
+
+	threadPacketFill(&threadPacket, 1000, 0, 0, &mutexInfo);
 
 	if (!threadCreate(threadEvenFunction, &threadPacket, &threadInfo[0])) {
 		ErrorLog(_T("Thread Creation failed"));
@@ -155,39 +155,24 @@ int _tmain(int argc, pStr argv[]) {
 
 	if (!threadCreate(threadPrimeFunction, &threadPacket, &threadInfo[1])) {
 		ErrorLog(_T("Thread Creation failed"));
-		threadCloseHandle(threadInfo[1].threadHandle);
+		threadCloseHandle(threadInfo[1].handle);
 		processExit(1);
 	}
 
-	Dword objectExit;
+	threadWaitGroup(2, threadInfo, 0);
 
-	objectExit = threadWaitOne(2, threadInfo);
-	if (objectExit == ERROR_NOT_ENOUGH_MEMORY) {
-		ErrorLog(_T("Thread Waiting failed"));
-		processExit(1);
-	}
-
-	if (objectExit == WAIT_OBJECT_0) {
-		_tprintf(_T("Even Sum: <%d>\n"), threadPacket.currentEvenSum);
-		threadWait(threadInfo[1].threadHandle);
-	}
-	if (objectExit == WAIT_OBJECT_0 + 1) {
-		_tprintf(_T("Prime Sum: <%d>\n"), threadPacket.currentPrimeSum);
-		threadWait(threadInfo[0].threadHandle);
-	}
-	
-
-	for (Int i = 0; i < 2; ++i) {
-		threadGetExitCode(threadInfo[i].threadHandle, &threadExit);
-		_tprintf(_T("Thread exit code is <%d:%d>\n"), i, threadExit);
+	for (int i = 0; i < 2; ++i) {
+		_tprintf(_T("Exit code: <%d>\n"), threadInfo[i].exitCode);
 	}
 
 	for (Int i = 0; i < 2; ++i) {
-		if (!threadCloseHandle(threadInfo[i].threadHandle)) {
+		if (!threadCloseHandle(&threadInfo[i])) {
 			ErrorLog(_T("Error closing thread handle"));
 			processExit(1);
 		}
 	}
+
+	mutexCloseHandle(&mutexInfo);
 
 	_tprintf(_T("Final sum is: <%d:%d>\n"), threadPacket.currentPrimeSum, threadPacket.currentEvenSum);
 	processExit(1);

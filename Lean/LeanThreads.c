@@ -9,51 +9,57 @@ Bool threadCreate(ThreadFunction threadFunction, pVoid threadArgs, pThreadInfo t
 		return 0;
 	}
 	
-	threadInfo->threadHandle = threadHandle;
-	threadInfo->threadId = threadId;
+	threadInfo->handle = threadHandle;
+	threadInfo->id = threadId;
+	threadInfo->exitCode = STILL_ACTIVE;
 
 	return 1;
 }
 
-Bool threadOpen(ThreadId threadId, pThreadInfo threadInfo) {
-	ThreadHandle threadHandle;
-
-	threadHandle = OpenThread(THREAD_ALL_ACCESS, FALSE, threadId);
-	if (threadHandle == NULL) {
-		return 0;
-	}
-
-	threadInfo->threadHandle = threadHandle;
-	threadInfo->threadId;
-
-	return 1;
+ExitCode threadWait(pThreadInfo threadInfo) {
+	ExitCode waitCode;
+	waitCode = WaitForSingleObject(threadInfo->handle, INFINITE);
+	GetExitCodeThread(threadInfo->handle, &threadInfo->exitCode);
+	return waitCode;
 }
 
-ExitCode threadWait(ThreadHandle threadHandle) {
-	return WaitForSingleObject(threadHandle, INFINITE);
-}
-
-Bool threadCloseHandle(ThreadHandle threadHandle) {
-	return CloseHandle(threadHandle);
+Bool threadCloseHandle(pThreadInfo threadInfo) {
+	return CloseHandle(threadInfo->handle);
 }
 
 Void threadExit(Dword exitCode) {
 	ExitThread(exitCode);
 }
 
-Bool threadGetExitCode(ThreadHandle threadHandle, pExitCode exitCode) {
-	return GetExitCodeThread(threadHandle, exitCode);
+Void threadGetPseudoHandle(pThreadInfo threadInfo) {
+	threadInfo->handle = GetCurrentThread();
 }
 
-ThreadHandle threadGetPseudoHandle(Void) {
-	return GetCurrentThread();
+Void threadGetId(pThreadInfo threadInfo) {
+	threadInfo->id = GetCurrentThreadId();
 }
 
-ThreadId threadGetId(Void) {
-	return GetCurrentThreadId();
+ExitCode threadWaitGroup(Dword count, pThreadInfo threadInfo, Bool all) {
+	pThreadHandle threadHandles;
+	ExitCode waitCode;
+
+	threadHandles = threadInfoToHandles(count, threadInfo);
+	if (threadHandles == NULL) {
+		return ERROR_NOT_ENOUGH_MEMORY;
+	}
+
+	waitCode = WaitForMultipleObjects(count, threadHandles, all, INFINITE);
+
+	for (uInt i = 0; i < count; ++i) {
+		GetExitCodeThread(threadInfo[i].handle, &threadInfo[i].exitCode);
+	}
+
+	free(threadHandles);
+
+	return waitCode;
 }
 
-pThreadHandle threadInfoToHandles(Dword count, pThreadInfo threadInfo) {
+static pThreadHandle threadInfoToHandles(Dword count, pThreadInfo threadInfo) {
 	pThreadHandle threadHandles;
 
 	threadHandles = (pThreadHandle)malloc(sizeof(ThreadHandle) * count);
@@ -62,57 +68,8 @@ pThreadHandle threadInfoToHandles(Dword count, pThreadInfo threadInfo) {
 	}
 
 	for (uInt i = 0; i < count; ++i) {
-		threadHandles[i] = threadInfo[i].threadHandle;
+		threadHandles[i] = threadInfo[i].handle;
 	}
 
 	return threadHandles;
-}
-
-Dword threadWaitAll(Dword count, pThreadInfo threadInfos) {
-	pThreadHandle threadHandles;
-	Dword waitCode;
-
-	threadHandles = threadInfoToHandles(count, threadInfos);
-	if (threadHandles == NULL) {
-		return ERROR_NOT_ENOUGH_MEMORY;
-	}
-
-	waitCode = WaitForMultipleObjects(count, threadHandles, 1, INFINITE);
-
-	free(threadHandles);
-
-	return waitCode;
-}
-
-Dword threadWaitOne(Dword count, pThreadInfo threadInfos) {
-	pThreadHandle threadHandles;
-	Dword waitCode;
-
-	threadHandles = threadInfoToHandles(count, threadInfos);
-	if (threadHandles == NULL) {
-		return ERROR_NOT_ENOUGH_MEMORY;
-	}
-
-	waitCode = WaitForMultipleObjects(count, threadHandles, 0, INFINITE);
-
-	free(threadHandles);
-	
-	return waitCode;
-}
-
-Void threadMutexFill(pMutexInfo mutexInfo, pStr mutexName) {
-	_tcscpy_s(mutexInfo->mutexName, MAX_PATH, mutexName);
-}
-
-Bool threadMutexCreate(pMutexInfo mutexInfo, Dword mutexFlag) {
-	MutexHandle mutexHandle;
-
-	mutexHandle = CreateMutexEx(NULL, mutexInfo->mutexName, mutexFlag, EVENT_ALL_ACCESS);
-	if (mutexHandle == NULL) {
-		return 0;
-	}
-
-	mutexInfo->mutexHandle = mutexHandle;
-
-	return 1;
 }

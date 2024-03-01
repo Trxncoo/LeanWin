@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Lean.c" />
+    <ClCompile Include="LeanMutex.c" />
     <ClCompile Include="LeanProcesses.c" />
     <ClCompile Include="LeanRegistry.c" />
     <ClCompile Include="LeanThreads.c" />
@@ -139,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lean.h" />
+    <ClInclude Include="LeanMutex.h" />
     <ClInclude Include="LeanProcesses.h" />
     <ClInclude Include="LeanRegistry.h" />
     <ClInclude Include="LeanTypes.h" />

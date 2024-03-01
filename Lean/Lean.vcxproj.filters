@@ -30,6 +30,9 @@
     <ClCompile Include="LeanThreads.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LeanMutex.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lean.h">
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LeanThreads.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LeanMutex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
