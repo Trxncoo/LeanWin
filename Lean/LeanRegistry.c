@@ -27,7 +27,7 @@ ErrorCode registryCreateKey(pKeyHandle keyHandle, pStr subKey) {
 	}
 
 	if (state == REG_OPENED_EXISTING_KEY) {
-		registryCloseKey(keyHandle);
+		registryCloseKey(*keyHandle);
 		return !ERROR_SUCCESS;
 	}
 
@@ -107,14 +107,14 @@ pStr registryBaseKey(pStr subKey) {
 
 	subString = _tcsstr(subKey, _T("\\"));
 	if (subString == NULL) {
-		return !ERROR_SUCCESS;
+		return NULL;
 	}
 
-	length = subString - subKey;
+	length = (uInt)(subString - subKey);
 
 	keyBuffer = (pStr)malloc((length + 1) * sizeof(TCHAR));
 	if (keyBuffer == NULL) {
-		return ERROR_NOT_ENOUGH_MEMORY;
+		return NULL;
 	}
 
 	_tcsnccpy_s(keyBuffer, length + 1, subKey, length);

@@ -2,6 +2,15 @@
 
 #include "LeanTypes.h"
 
+typedef HKEY KeyHandle;
+typedef PHKEY pKeyHandle;
+
+typedef BYTE KeyDataValue;
+typedef LPBYTE pKeyDataValue;
+
+typedef DWORD KeyDataType, KeyDataSize;
+typedef LPDWORD pKeyDataSize, pKeyDataType;
+
 typedef struct RegistryData RegistryData;
 typedef struct RegistryData* pRegistryData;
 
