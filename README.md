@@ -14,8 +14,6 @@ Before using this library, ensure that you have:
 ### Defining Mutexes
 
 ```c
-#include "Mutex.h"
-
 // Define MutexInfo structure
 MutexInfo mutexInfo;
 ```
@@ -25,8 +23,6 @@ MutexInfo mutexInfo;
 To create a mutex, you need to fill the `MutexInfo` structure with a name and then call `mutexCreate()`.
 
 ```c
-#include "Mutex.h"
-
 // Define and set mutex name
 MutexInfo mutexInfo;
 char name[MAX_PATH] = "Chipi";
@@ -44,8 +40,6 @@ if (!success) {
 To protect a critical section of code with a mutex, use `mutexLock()` and `mutexUnlock()`.
 
 ```c
-#include "Mutex.h"
-
 // Lock the mutex
 mutexLock(&mutexInfo);
 
@@ -60,8 +54,6 @@ mutexUnlock(&mutexInfo);
 When you're done with the mutex, close its handle using `mutexCloseHandle()`.
 
 ```c
-#include "Mutex.h"
-
 // Close the mutex handle
 Bool success = mutexCloseHandle(&mutexInfo);
 if (!success) {
