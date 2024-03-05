@@ -18,6 +18,10 @@ Bool mutexCreate(pMutexInfo mutexInfo) {
 	return 1;
 }
 
+Void mutexSetName(pMutexInfo mutexInfo, pStr name) {
+	_tcscpy_s(mutexInfo->name, MAX_PATH - 1, name);
+}
+
 Bool mutexCloseHandle(pMutexInfo mutexInfo) {
 	return CloseHandle(mutexInfo->handle);
 }

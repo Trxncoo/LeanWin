@@ -33,6 +33,9 @@
     <ClCompile Include="LeanMutex.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LeanEvents.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lean.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LeanMutex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LeanEvents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -142,7 +142,7 @@ int _tmain(int argc, pStr argv[]) {
 	ThreadPacket threadPacket;
 	MutexInfo mutexInfo;
 
-	_tcscpy_s(mutexInfo.name, MAX_PATH - 1, _T("Nome"));
+	mutexSetName(&mutexInfo, _T("Ola"));
 
 	mutexCreate(&mutexInfo);
 

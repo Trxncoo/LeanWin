@@ -18,6 +18,8 @@ Void mutexDebug(pMutexInfo mutexInfo);
 // Must fill mutexInfo with mutex name
 Bool mutexCreate(pMutexInfo mutexInfo);
 
+Void mutexSetName(pMutexInfo mutexInfo, pStr name);
+
 Bool mutexCloseHandle(pMutexInfo mutexInfo);
 
 Void mutexLock(pMutexInfo mutexInfo);
