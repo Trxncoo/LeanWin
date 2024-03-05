@@ -74,6 +74,10 @@ mutexDebug(&mutexInfo);
 
 Creates a mutex with the given name in `mutexInfo`. Returns `true` on success, `false` otherwise.
 
+### `Void mutexDebug(pMutexInfo mutexInfo)`
+
+Prints mutex information
+
 ### `Bool mutexCloseHandle(pMutexInfo mutexInfo)`
 
 Closes the handle of the mutex specified in `mutexInfo`. Returns `true` on success, `false` otherwise.
