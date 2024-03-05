@@ -25,8 +25,7 @@ To create a mutex, you need to fill the `MutexInfo` structure with a name and th
 ```c
 // Define and set mutex name
 MutexInfo mutexInfo;
-char name[MAX_PATH] = "Chipi";
-mutexSetName(&mutexInfo, name); 
+mutexSetName(&mutexInfo, _T("Chipi")); 
 
 // Create the mutex
 Bool success = mutexCreate(&mutexInfo);
