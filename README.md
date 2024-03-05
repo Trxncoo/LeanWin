@@ -74,9 +74,9 @@ mutexDebug(&mutexInfo);
 
 Creates a mutex with the given name in `mutexInfo`. Returns `true` on success, `false` otherwise.
 
-### `Void mutexDebug(pMutexInfo mutexInfo)`
+### `Void mutexSetName(pMutexInfo mutexInfo, pStr name)`
 
-Prints mutex information
+Fills `mutexInfo` with `name` in the `mutexInfo.name` field
 
 ### `Bool mutexCloseHandle(pMutexInfo mutexInfo)`
 
