@@ -1,14 +1,97 @@
-# Mutexes
+# LeanWin Documentation
 
-For named mutexes, fill mutexInfo.name with a name 
+This library provides functions for working with windows.h in C.
+
+## Prerequisites
+
+Before using this library, ensure that you have:
+
+- A C compiler compatible with the Windows environment.
+- Included "LeanTypes.h" header file.
+
+## Mutexes
+
+### Defining Mutexes
+
 ```c
-Bool mutexCreate(pMutexInfo mutexInfo);
+#include "Mutex.h"
+
+// Define MutexInfo structure
+MutexInfo mutexInfo;
 ```
 
-Ex:
+### Creating a Mutex
+
+To create a mutex, you need to fill the `MutexInfo` structure with a name and then call `mutexCreate()`.
+
 ```c
-  MutexInfo mutexInfo;
-  pStr name[MAX_PATH] = _T("Chipi");
-  mutexSetName(&mutexInfo, name); 
-  mutexCreate(&mutexInfo);
+#include "Mutex.h"
+
+// Define and set mutex name
+MutexInfo mutexInfo;
+char name[MAX_PATH] = "Chipi";
+mutexSetName(&mutexInfo, name); 
+
+// Create the mutex
+Bool success = mutexCreate(&mutexInfo);
+if (!success) {
+    // Handle error
+}
 ```
+
+### Locking and Unlocking a Mutex
+
+To protect a critical section of code with a mutex, use `mutexLock()` and `mutexUnlock()`.
+
+```c
+#include "Mutex.h"
+
+// Lock the mutex
+mutexLock(&mutexInfo);
+
+// Critical section
+
+// Unlock the mutex
+mutexUnlock(&mutexInfo);
+```
+
+### Closing a Mutex Handle
+
+When you're done with the mutex, close its handle using `mutexCloseHandle()`.
+
+```c
+#include "Mutex.h"
+
+// Close the mutex handle
+Bool success = mutexCloseHandle(&mutexInfo);
+if (!success) {
+    // Handle error
+}
+```
+
+## Function Reference
+
+### `Bool mutexCreate(pMutexInfo mutexInfo)`
+
+Creates a mutex with the given name in `mutexInfo`. Returns `true` on success, `false` otherwise.
+
+### `Bool mutexCloseHandle(pMutexInfo mutexInfo)`
+
+Closes the handle of the mutex specified in `mutexInfo`. Returns `true` on success, `false` otherwise.
+
+### `Void mutexLock(pMutexInfo mutexInfo)`
+
+Locks the mutex specified in `mutexInfo`.
+
+### `Void mutexUnlock(pMutexInfo mutexInfo)`
+
+Unlocks the mutex specified in `mutexInfo`.
+
+### `Void mutexDebug(pMutexInfo mutexInfo)`
+
+Prints debug information about the mutex specified in `mutexInfo`.
+
+## Notes
+
+- Always check the return values of the functions for errors.
+- Ensure proper error handling is implemented in case of failures.
