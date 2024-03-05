@@ -60,6 +60,14 @@ if (!success) {
 }
 ```
 
+### Debugging Mutexes
+
+```c
+// Print mutex Information
+mutexDebug(&mutexInfo);
+```
+
+
 ## Function Reference
 
 ### `Bool mutexCreate(pMutexInfo mutexInfo)`
