@@ -23,12 +23,11 @@ MutexInfo mutexInfo;
 To create a mutex, you need to fill the `MutexInfo` structure with a name and then call `mutexCreate()`.
 
 ```c
-// Define and set mutex name
+// Define a mutex
 MutexInfo mutexInfo;
-mutexSetName(&mutexInfo, _T("Chipi")); 
 
 // Create the mutex
-Bool success = mutexCreate(&mutexInfo);
+Bool success = mutexCreate(&mutexInfo, _T("Chipi"));
 if (!success) {
     // Handle error
 }
