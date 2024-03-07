@@ -62,6 +62,8 @@ if (!success) {
 
 ### Debugging Mutexes
 
+It only works if `LEAN_DEBUG` is defined in `LeanTypes.h`
+
 ```c
 // Print mutex Information
 mutexDebug(&mutexInfo);
