@@ -142,9 +142,9 @@ int _tmain(int argc, pStr argv[]) {
 	ThreadPacket threadPacket;
 	MutexInfo mutexInfo;
 
-	mutexSetName(&mutexInfo, _T("Ola"));
+	mutexCreate(&mutexInfo, _T("Ola"));
 
-	mutexCreate(&mutexInfo);
+	mutexDebug(&mutexInfo);
 
 	threadPacketFill(&threadPacket, 1000, 0, 0, &mutexInfo);
 

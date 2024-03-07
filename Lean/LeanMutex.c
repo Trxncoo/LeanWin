@@ -4,7 +4,7 @@ Void mutexDebug(pMutexInfo mutexInfo) {
 	_tprintf(_T("<Mutex Debug>\n\tName: <%s>\n\tState: <%d>\n"), mutexInfo->name, mutexInfo->state);
 }
 
-Bool mutexCreate(pMutexInfo mutexInfo) {
+Bool mutexCreate(pMutexInfo mutexInfo, pStr name) {
 	MutexHandle mutexHandle;
 
 	mutexHandle = CreateMutex(NULL, FALSE, mutexInfo->name);
@@ -14,12 +14,9 @@ Bool mutexCreate(pMutexInfo mutexInfo) {
 
 	mutexInfo->handle = mutexHandle;
 	mutexInfo->state = 0;
+	_tcscpy_s(mutexInfo->name, MAX_PATH - 1, name);
 
 	return 1;
-}
-
-Void mutexSetName(pMutexInfo mutexInfo, pStr name) {
-	_tcscpy_s(mutexInfo->name, MAX_PATH - 1, name);
 }
 
 Bool mutexCloseHandle(pMutexInfo mutexInfo) {
