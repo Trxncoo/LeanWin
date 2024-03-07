@@ -9,9 +9,64 @@ Before using this library, ensure that you have:
 - A C compiler compatible with the Windows environment.
 - Included "LeanTypes.h" header file.
 
-## Mutexes
 
-### Defining Mutexes
+## CriticalSection
+
+### Defining a CriticalSection
+
+```c
+// Define CriticalSectionInfo structure
+CriticalSectionInfo criticalSectionInfo;
+```
+
+### Creating a CriticalSection
+
+To create a CriticalSection, call `criticalSectionCreate()`.
+
+```c
+// Define a CriticalSection
+CriticalSectionInfo criticalSectionInfo;
+
+// Create the CriticalSection
+criticalSectionCreate(&criticalSectionInfo);
+```
+
+### Entering and Leaving a CriticalSection
+
+To protect a critical section of code with a CriticalSection, use `criticalSectionEnter()` and `criticalSectionLeave()`.
+
+```c
+// Enter the CriticalSection
+criticalSectionEnter(&criticalSectionInfo);
+
+// Critical section
+
+// Leave the CriticalSection
+criticalSectionLeave(&criticalSectionInfo);
+```
+
+### Closing a CriticalSection
+
+When you're done with the CriticalSection, close it using `criticalSectionClose()`.
+
+```c
+// Close the CriticalSection
+criticalSectionClose(&criticalSectionInfo);
+```
+
+### Debugging a CriticalSection
+
+It only works if `LEAN_DEBUG` is defined in `LeanTypes.h`
+
+```c
+// Print CriticalSection information
+criticalSectionDebug(&criticalSectionInfo);
+```
+
+
+## Mutex
+
+### Defining a Mutex
 
 ```c
 // Define MutexInfo structure
@@ -20,15 +75,14 @@ MutexInfo mutexInfo;
 
 ### Creating a Mutex
 
-To create a mutex, you need to fill the `MutexInfo` structure with a name and then call `mutexCreate()`.
+To create a Mutex, call `mutexCreate()`.
 
 ```c
-// Define and set mutex name
+// Define a Mutex
 MutexInfo mutexInfo;
-mutexSetName(&mutexInfo, _T("Chipi")); 
 
-// Create the mutex
-Bool success = mutexCreate(&mutexInfo);
+// Create the Mutex
+Bool success = mutexCreate(&mutexInfo, _T("Chipi"));
 if (!success) {
     // Handle error
 }
@@ -36,25 +90,25 @@ if (!success) {
 
 ### Locking and Unlocking a Mutex
 
-To protect a critical section of code with a mutex, use `mutexLock()` and `mutexUnlock()`.
+To protect a critical section of code with a Mutex, use `mutexLock()` and `mutexUnlock()`.
 
 ```c
-// Lock the mutex
+// Lock the Mutex
 mutexLock(&mutexInfo);
 
 // Critical section
 
-// Unlock the mutex
+// Unlock the Mutex
 mutexUnlock(&mutexInfo);
 ```
 
-### Closing a Mutex Handle
+### Closing a Mutex
 
-When you're done with the mutex, close its handle using `mutexCloseHandle()`.
+When you're done with the Mutex, close it using `mutexClose()`.
 
 ```c
-// Close the mutex handle
-Bool success = mutexCloseHandle(&mutexInfo);
+// Close the Mutex
+Bool success = mutexClose(&mutexInfo);
 if (!success) {
     // Handle error
 }
@@ -62,37 +116,12 @@ if (!success) {
 
 ### Debugging Mutexes
 
+It only works if `LEAN_DEBUG` is defined in `LeanTypes.h`
+
 ```c
-// Print mutex Information
+// Print Mutex information
 mutexDebug(&mutexInfo);
 ```
-
-
-## Function Reference
-
-### `Bool mutexCreate(pMutexInfo mutexInfo)`
-
-Creates a mutex with the given name in `mutexInfo`. Returns `true` on success, `false` otherwise.
-
-### `Void mutexSetName(pMutexInfo mutexInfo, pStr name)`
-
-Fills `mutexInfo` with `name` in the `mutexInfo.name` field
-
-### `Bool mutexCloseHandle(pMutexInfo mutexInfo)`
-
-Closes the handle of the mutex specified in `mutexInfo`. Returns `true` on success, `false` otherwise.
-
-### `Void mutexLock(pMutexInfo mutexInfo)`
-
-Locks the mutex specified in `mutexInfo`.
-
-### `Void mutexUnlock(pMutexInfo mutexInfo)`
-
-Unlocks the mutex specified in `mutexInfo`.
-
-### `Void mutexDebug(pMutexInfo mutexInfo)`
-
-Prints debug information about the mutex specified in `mutexInfo`.
 
 ## Notes
 
