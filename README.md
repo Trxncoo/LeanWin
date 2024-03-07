@@ -20,7 +20,7 @@ MutexInfo mutexInfo;
 
 ### Creating a Mutex
 
-To create a mutex, you need to fill the `MutexInfo` structure with a name and then call `mutexCreate()`.
+To create a mutex, call `mutexCreate()`.
 
 ```c
 // Define a mutex
