@@ -10,7 +10,79 @@ Before using this library, ensure that you have:
 - Included "LeanTypes.h" header file.
 
 
+
+## Event
+
+### Defining an Event
+
+```c
+// Define EventInfo structure
+EventInfo eventInfo;
+```
+
+### Creating an Event
+
+To create an Event, call `eventCreate()`.
+
+```c
+// Define an Event
+EventInfo eventInfo;
+
+// Create the Event
+Bool success = eventCreate(&eventInfo,
+            1,    // initialState
+            1,    // manualReset
+            _T("Chipi"));
+if (!success) {
+    // Handle error
+}
+```
+
+### Setting an Event
+
+To set/reset an Event, call `eventSet()` and `eventReset()`.
+
+```c
+// Set an Event
+Bool setSuccess = eventSet(&eventinfo);
+if (!setSuccess) {
+    // Handle error
+}
+
+// Reset an Event
+Bool resetSuccess = eventReset(&eventInfo);
+if (!resetSuccess) {
+    // Handle error
+}
+```
+
+### Waiting on an Event
+
+To wait on an Event, call `eventWait()`.
+
+```c
+// Wait on an Event
+eventWait(&eventInfo);
+```
+
+### Closing an Event
+
+To close an Event, call `eventClose()`.
+
+```c
+// Close an Event
+Bool success = eventClose(&eventinfo);
+if (!success) {
+    // Handle error
+}
+```
+
+
+
 ## CriticalSection
+
+A CriticalSection works like a Mutex but only in the current process
+Use it when you need to protect a critical section in the current process
 
 ### Defining a CriticalSection
 
@@ -57,6 +129,8 @@ criticalSectionClose(&criticalSectionInfo);
 ### Debugging a CriticalSection
 
 It only works if `LEAN_DEBUG` is defined in `LeanTypes.h`
+Sometimes there might be a race condition in `mutexInfo.state`, specially when a thread is waiting on a mutex.
+The printing of the state might be affected by a locking/unlocking of a mutex in another thread.
 
 ```c
 // Print CriticalSection information
@@ -64,7 +138,11 @@ criticalSectionDebug(&criticalSectionInfo);
 ```
 
 
+
 ## Mutex
+
+A Mutex protects a critical section in various processes
+Use it when you need to protect a critical section in various processes, usually with shared memory
 
 ### Defining a Mutex
 
@@ -117,6 +195,8 @@ if (!success) {
 ### Debugging Mutexes
 
 It only works if `LEAN_DEBUG` is defined in `LeanTypes.h`
+Sometimes there might be a race condition in `mutexInfo.state`, specially when a thread is waiting on a mutex.
+The printing of the state might be affected by a locking/unlocking of a mutex in another thread.
 
 ```c
 // Print Mutex information
