@@ -57,6 +57,8 @@ criticalSectionClose(&criticalSectionInfo);
 ### Debugging a CriticalSection
 
 It only works if `LEAN_DEBUG` is defined in `LeanTypes.h`
+Sometimes there might be a race condition in `mutexInfo.state`, specially when a thread is waiting on a mutex.
+The printing of the state might be affected by a locking/unlocking of a mutex in another thread.
 
 ```c
 // Print CriticalSection information
@@ -117,6 +119,8 @@ if (!success) {
 ### Debugging Mutexes
 
 It only works if `LEAN_DEBUG` is defined in `LeanTypes.h`
+Sometimes there might be a race condition in `mutexInfo.state`, specially when a thread is waiting on a mutex.
+The printing of the state might be affected by a locking/unlocking of a mutex in another thread.
 
 ```c
 // Print Mutex information
