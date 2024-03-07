@@ -1,7 +1,9 @@
 #include "LeanMutex.h"
 
 Void mutexDebug(pMutexInfo mutexInfo) {
-	_tprintf(_T("<Mutex Debug>\n\tName: <%s>\n\tState: <%d>\n"), mutexInfo->name, mutexInfo->state);
+#ifdef LEAN_DEBUG
+	_ftprintf_s(stderr, _T("<Mutex Debug>\n\tName: <%s>\n\tState: <%d>\n"), mutexInfo->name, mutexInfo->state);
+#endif
 }
 
 Bool mutexCreate(pMutexInfo mutexInfo, pStr name) {
@@ -19,7 +21,7 @@ Bool mutexCreate(pMutexInfo mutexInfo, pStr name) {
 	return 1;
 }
 
-Bool mutexCloseHandle(pMutexInfo mutexInfo) {
+Bool mutexClose(pMutexInfo mutexInfo) {
 	return CloseHandle(mutexInfo->handle);
 }
 

@@ -17,7 +17,7 @@ Void mutexDebug(pMutexInfo mutexInfo);
 
 Bool mutexCreate(pMutexInfo mutexInfo, pStr name);
 
-Bool mutexCloseHandle(pMutexInfo mutexInfo);
+Bool mutexClose(pMutexInfo mutexInfo);
 
 Void mutexLock(pMutexInfo mutexInfo);
 

@@ -1,15 +1,16 @@
 #include "LeanEvents.h"
 
-Bool eventCreate(pEventInfo eventInfo, Bool initialState) {
+Bool eventCreate(pEventInfo eventInfo, Bool initialState, Bool manualReset, pStr name) {
 	EventHandle eventHandle;
 
-	eventHandle = CreateEvent(NULL, TRUE, initialState, eventInfo->name);
+	eventHandle = CreateEvent(NULL, manualReset, initialState, eventInfo->name);
 	if (eventHandle == NULL) {
 		return 0;
 	}
 
 	eventInfo->handle = eventHandle;
 	eventInfo->state = initialState;
+	_tcscpy_s(eventInfo->name, MAX_PATH - 1, name);
 
 	return 1;
 }

@@ -11,19 +11,21 @@ struct _ThreadPacket{
 	Int number;
 	Int currentEvenSum;
 	Int currentPrimeSum;
-	pMutexInfo mutexInfo;
+	pCriticalSectionInfo criticalSectionInfo;
 };
 
-Void threadPacketFill(pThreadPacket threadPacket, Int number, Int currentEvenSum, Int currentPrimeSum, pMutexInfo mutexInfo) {
+Void threadPacketFill(pThreadPacket threadPacket, Int number, Int currentEvenSum, Int currentPrimeSum, pCriticalSectionInfo criticalSectionInfo) {
 	threadPacket->number = number;
 	threadPacket->currentEvenSum = currentEvenSum;
 	threadPacket->currentPrimeSum = currentPrimeSum;
-	threadPacket->mutexInfo = mutexInfo;
+	threadPacket->criticalSectionInfo = criticalSectionInfo;
 }
 
 Dword WINAPI threadEvenFunction(pVoid args) {
 	Int evenCount = 0;
 	pThreadPacket threadPacket = (pThreadPacket)args;
+
+	criticalSectionEnter(threadPacket->criticalSectionInfo);
 
 	for (Int i = 1; i <= threadPacket->number; ++i) {
 		if (i % 2 == 0) {
@@ -31,6 +33,8 @@ Dword WINAPI threadEvenFunction(pVoid args) {
 			++evenCount;
 		}
 	}
+
+	criticalSectionLeave(threadPacket->criticalSectionInfo);
 
 	threadExit(1);
 }
@@ -51,12 +55,16 @@ Dword WINAPI threadPrimeFunction(pVoid args) {
 	Int primeCount = 0;
 	pThreadPacket threadPacket = (pThreadPacket)args;
 
+	criticalSectionEnter(threadPacket->criticalSectionInfo);
+
 	for (Int i = 1; i <= threadPacket->number; ++i) {
 		if (IsPrime(i)) {
 			threadPacket->currentPrimeSum += i;
 			++primeCount;
 		}
 	}
+
+	criticalSectionLeave(threadPacket->criticalSectionInfo);
 
 	threadExit(1);
 }
@@ -140,13 +148,13 @@ int _tmain(int argc, pStr argv[]) {
 	ThreadInfo threadInfo[2];
 	ErrorCode threadExit = 0;
 	ThreadPacket threadPacket;
-	MutexInfo mutexInfo;
+	CriticalSectionInfo criticalSectionInfo;
 
-	mutexCreate(&mutexInfo, _T("Ola"));
+	criticalSectionCreate(&criticalSectionInfo);
 
-	mutexDebug(&mutexInfo);
+	criticalSectionDebug(&criticalSectionInfo);
 
-	threadPacketFill(&threadPacket, 1000, 0, 0, &mutexInfo);
+	threadPacketFill(&threadPacket, 1000, 0, 0, &criticalSectionInfo);
 
 	if (!threadCreate(threadEvenFunction, &threadPacket, &threadInfo[0])) {
 		ErrorLog(_T("Thread Creation failed"));
@@ -159,7 +167,7 @@ int _tmain(int argc, pStr argv[]) {
 		processExit(1);
 	}
 
-	threadWaitGroup(2, threadInfo, 0);
+	threadWaitGroup(2, threadInfo, 1);
 
 	for (int i = 0; i < 2; ++i) {
 		_tprintf(_T("Exit code: <%d>\n"), threadInfo[i].exitCode);
@@ -172,10 +180,10 @@ int _tmain(int argc, pStr argv[]) {
 		}
 	}
 
-	mutexCloseHandle(&mutexInfo);
+	criticalSectionClose(&criticalSectionInfo);
 
 	_tprintf(_T("Final sum is: <%d:%d>\n"), threadPacket.currentPrimeSum, threadPacket.currentEvenSum);
 	processExit(1);
 
 #endif
-}
+}

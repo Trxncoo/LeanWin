@@ -13,8 +13,7 @@ struct _EventInfo {
 	Bool state;
 };
 
-// Must fill eventInfo with event name
-Bool eventCreate(pEventInfo eventInfo, Bool initialState);
+Bool eventCreate(pEventInfo eventInfo, Bool initialState, Bool manualReset, pStr name);
 
 Bool eventSet(pEventInfo eventInfo);
 
