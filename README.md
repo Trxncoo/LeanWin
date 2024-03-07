@@ -12,6 +12,9 @@ Before using this library, ensure that you have:
 
 ## CriticalSection
 
+A CriticalSection works like a Mutex but only in the current process
+Use it when you need to protect a critical section in the current process
+
 ### Defining a CriticalSection
 
 ```c
@@ -67,6 +70,9 @@ criticalSectionDebug(&criticalSectionInfo);
 
 
 ## Mutex
+
+A Mutex protects a critical section in various processes
+Use it when you need to protect a critical section in various processes, usually with shared memory
 
 ### Defining a Mutex
 
