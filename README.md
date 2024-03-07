@@ -68,33 +68,6 @@ It only works if `LEAN_DEBUG` is defined in `LeanTypes.h`
 mutexDebug(&mutexInfo);
 ```
 
-
-## Function Reference
-
-### `Bool mutexCreate(pMutexInfo mutexInfo)`
-
-Creates a mutex with the given name in `mutexInfo`. Returns `true` on success, `false` otherwise.
-
-### `Void mutexSetName(pMutexInfo mutexInfo, pStr name)`
-
-Fills `mutexInfo` with `name` in the `mutexInfo.name` field
-
-### `Bool mutexCloseHandle(pMutexInfo mutexInfo)`
-
-Closes the handle of the mutex specified in `mutexInfo`. Returns `true` on success, `false` otherwise.
-
-### `Void mutexLock(pMutexInfo mutexInfo)`
-
-Locks the mutex specified in `mutexInfo`.
-
-### `Void mutexUnlock(pMutexInfo mutexInfo)`
-
-Unlocks the mutex specified in `mutexInfo`.
-
-### `Void mutexDebug(pMutexInfo mutexInfo)`
-
-Prints debug information about the mutex specified in `mutexInfo`.
-
 ## Notes
 
 - Always check the return values of the functions for errors.
