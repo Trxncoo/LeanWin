@@ -37,7 +37,7 @@ Bool eventReset(pEventInfo eventInfo) {
 	return resetResult;
 }
 
-Bool eventCloseHandle(pEventInfo eventInfo) {
+Bool eventClose(pEventInfo eventInfo) {
 	return CloseHandle(eventInfo->handle);
 }
 

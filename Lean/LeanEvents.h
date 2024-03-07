@@ -19,6 +19,6 @@ Bool eventSet(pEventInfo eventInfo);
 
 Bool eventReset(pEventInfo eventInfo);
 
-Bool eventCloseHandle(pEventInfo eventInfo);
+Bool eventClose(pEventInfo eventInfo);
 
 ExitCode eventWait(pEventInfo eventInfo);
