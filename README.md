@@ -40,7 +40,7 @@ if (!success) {
 To wait for a process to finish, use the `processWait()` function and pass it a pointer to a `ProcessInfo` structure.
 The `processWait()` function automatically stores the process exit code in the `ProcessInfo.exitCode` field upon process termination.
 It returns the value that `WaitForSingleObject()` would return.
-For currently running processes, the `ProcessInfo.exitCode` field is set to `STILL_aCTIVE`.
+For currently running processes, the `ProcessInfo.exitCode` field is set to `STILL_ACTIVE`.
 
 ```c
 // Wait for a process to finish
