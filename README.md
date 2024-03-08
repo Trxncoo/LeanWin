@@ -96,7 +96,7 @@ Bool processCreated;
 
 processCreated = processCreate(argv[1], &newProcess);
 if (!processCreated) {
-    ErrorLog(_T("Process Creation Failed"));
+    _tprintf(_T("Process Creation Failed\n"));
 	processExit(1);
 }
 
