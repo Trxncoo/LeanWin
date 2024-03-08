@@ -60,7 +60,7 @@ processExit(1);
 
 To close an active process, use the `processClose()` function and pass it a pointer to a `ProcessInfo` structure.
 The `processClose()` function closes the `ProcessInfo.processHandle` and `ProcessInfo.threadHandle` fields.
-It returns `Bool`, indicating its success determined by the `or` of both `CloseHandle()` calls.
+It returns `Bool`, indicating its success determined by the `or` evaluation of both `CloseHandle()` calls.
 
 ```c
 // Close a currently active process
