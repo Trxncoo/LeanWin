@@ -9,7 +9,109 @@ Before using this library, ensure that you have:
 - A C compiler compatible with the Windows environment.
 - Included "LeanTypes.h" header file.
 
+## Process
 
+### Defining a Process
+
+To define a process, make a `ProcessInfo` structure.
+
+```c
+// Define ProcessInfo structure
+ProcessInfo process;
+```
+
+### Creating a Process
+
+To create a new process, use the `processCreate()` function and pass it the process to create and a pointer to a `ProcessInfo` structure.
+It returns `Bool`, indicating its success.
+
+```c
+// Define a Process
+ProcessInfo processInfo;
+
+Bool success = processCreate(argv[1], &processInfo);
+if (!success) {
+    // Handle error
+}
+```
+
+### Waiting for a Process
+
+To wait for a process to finish, use the `processWait()` function and pass it a pointer to a `ProcessInfo` structure.
+The `processWait()` function automatically stores the process exit code in the `ProcessInfo.exitCode` field upon process termination.
+It returns the value that `WaitForSingleObject()` would return.
+For currently running processes, the `ProcessInfo.exitCode` field is set to `STILL_aCTIVE`.
+
+```c
+// Wait for a process to finish
+processWait(&processInfo);
+```
+
+### Exiting a Process with a return value
+
+To exit a process and return a value, use the `processExit()` function and pass it a `uInt` value.
+
+```c
+// Exit a process returning a value
+processExit(1);
+```
+
+### Closing an active Process
+
+To close an active process, use the `processClose()` function and pass it a pointer to a `ProcessInfo` structure.
+The `processClose()` function closes the `ProcessInfo.processHandle` and `ProcessInfo.threadHandle` fields.
+It returns `Bool`, indicating its success determined by the `or` of both `CloseHandle()` calls.
+
+```c
+// Close a currently active process
+processClose(&processInfo);
+```
+
+### Getting a pseudo handle to the current Process
+
+To get a pseudo handle to the current process, use the `processGetPseudoHandle()` function and pass it a pointer to a `ProcessInfo` structure.
+The `processGetPseudoHandle()` function fills the `ProcessInfo.processHandle` field with a pseudo handle to the current process.
+Pseudo handles only work in the current process.
+
+```c
+// Get a pseudo handle to the current process
+processGetPseudoHandle(&processInfo);
+```
+
+### Gettin the current Process Id
+
+To get the current process Id, use the `processGetId()` function and pass it a pointer to a `ProcessInfo` struture.
+The `processGetId()` function fills the `ProcessInfo.processId` field with the current process Id.
+
+```c
+// Get the current process Id
+processGetId(&processInfo);
+```
+
+### Process Program Example
+
+```c
+ProcessInfo newProcess, currentProcess;
+Bool processCreated;
+
+processCreated = processCreate(argv[1], &newProcess);
+if (!processCreated) {
+    ErrorLog(_T("Process Creation Failed"));
+	processExit(1);
+}
+
+processWait(&newProcess);
+
+_tprintf(_T("The process exit code was <%d>\n"), newProcess.exitCode);
+
+processClose(&newProcess);
+
+processGetId(&currentProcess);
+
+_tprintf(_T("The current ProcessId = <%d>\n"), currentProcess.processId);
+
+ExitProcess(0);
+```
 
 ## Event
 
