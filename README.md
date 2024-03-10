@@ -22,14 +22,14 @@ ProcessInfo process;
 
 ### Creating a Process
 
-To create a new process, use the `processCreate()` function and pass it the process to create and a pointer to a `ProcessInfo` structure.
+To create a new process, use the `processCreate()` function and pass it a pointer to a `ProcessInfo` structure and the process to create.
 It returns `Bool`, indicating its success.
 
 ```c
 // Define a Process
 ProcessInfo processInfo;
 
-Bool success = processCreate(argv[1], &processInfo);
+Bool success = processCreate(&processInfo, argv[1]);
 if (!success) {
     // Handle error
 }
@@ -94,7 +94,7 @@ processGetId(&processInfo);
 ProcessInfo newProcess, currentProcess;
 Bool processCreated;
 
-processCreated = processCreate(argv[1], &newProcess);
+processCreated = processCreate(&newProces, argv[1]);
 if (!processCreated) {
     _tprintf(_T("Process Creation Failed\n"));
 	processExit(1);
