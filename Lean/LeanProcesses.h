@@ -16,7 +16,7 @@ struct _ProcessInfo {
 	ExitCode exitCode;
 };
 
-Bool processCreate(pStr commandLine, pProcessInfo processInfo);
+Bool processCreate(pProcessInfo processInfo, pStr commandLine);
 
 ExitCode processWait(pProcessInfo processInfo);
 

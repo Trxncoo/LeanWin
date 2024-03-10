@@ -76,7 +76,7 @@ int _tmain(int argc, pStr argv[]) {
 	ProcessInfo newProcess, currentProcess;
 	Bool processCreated;
 	
-	processCreated = processCreate(argv[1], &newProcess);
+	processCreated = processCreate(&newProcess, argv[1]);
 	if (!processCreated) {
 		ErrorLog(_T("Process Creation Failed"));
 		processExit(1);

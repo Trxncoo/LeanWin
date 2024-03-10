@@ -1,6 +1,6 @@
 #include "LeanProcesses.h"
 
-Bool processCreate(pStr commandLine, pProcessInfo processInfo) {
+Bool processCreate(pProcessInfo processInfo, pStr commandLine) {
 	Bool processCreationResult;
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
