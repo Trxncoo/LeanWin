@@ -1,8 +1,8 @@
 #include "Lean.h"
 
-//#define PROCESS
+#define PROCESS
 //#define REGISTRY
-#define THREAD
+//#define THREAD
 
 typedef struct _ThreadPacket ThreadPacket;
 typedef struct _ThreadPacket* pThreadPacket;
@@ -73,33 +73,24 @@ int _tmain(int argc, pStr argv[]) {
 	LeanInit();
 
 #ifdef PROCESS
-	ProcessHandle processHandle;
-	ProcessInfo processInfo;
+	ProcessInfo newProcess, currentProcess;
 	Bool processCreated;
-	ProcessId processId;
-	ExitCode processExitCode;
-
-	ZeroMemory(&processInfo, sizeof(processInfo));
 	
-	processCreated = processCreate(argv[1], &processInfo);
-
+	processCreated = processCreate(argv[1], &newProcess);
 	if (!processCreated) {
-		ErrorLog("Process Creation Failed");
+		ErrorLog(_T("Process Creation Failed"));
 		processExit(1);
 	}
 
-	processWait(processInfo.hProcess);
+	processWait(&newProcess);
 
-	processGetExitCode(processInfo.hProcess, &processExitCode);
+	_tprintf(_T("The process exit code was <%d>\n"), newProcess.exitCode);
 
-	_tprintf(_T("The process exit code was <%d>\n"), processExitCode);
+	processClose(&newProcess);
 
-	processCloseHandle(processInfo.hProcess);
-	processCloseHandle(processInfo.hThread);
+	processGetId(&currentProcess);
 
-	processId = processGetId();
-
-	_tprintf(_T("The current ProcessId = <%d>\n"), processId);
+	_tprintf(_T("The current ProcessId = <%d>\n"), currentProcess.processId);
 
 	ExitProcess(0);
 #endif

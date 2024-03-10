@@ -13,7 +13,7 @@ typedef struct _ThreadInfo* pThreadInfo;
 struct _ThreadInfo {
 	ThreadHandle handle;
 	ThreadId id;
-	Dword exitCode;
+	ExitCode exitCode;
 };
 
 // Fills threadInfo with 
@@ -23,7 +23,7 @@ Bool threadCreate(ThreadFunction threadFunction, pVoid threadArgs, pThreadInfo t
 ExitCode threadWait(pThreadInfo threadInfo);
 
 // Closes threadInfo Handle
-Bool threadCloseHandle(pThreadInfo threadInfo);
+Bool threadClose(pThreadInfo threadInfo);
 
 // Exits a thread, returning exitCode
 Void threadExit(Dword exitCode);

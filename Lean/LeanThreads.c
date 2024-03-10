@@ -17,13 +17,17 @@ Bool threadCreate(ThreadFunction threadFunction, pVoid threadArgs, pThreadInfo t
 }
 
 ExitCode threadWait(pThreadInfo threadInfo) {
-	ExitCode waitCode;
-	waitCode = WaitForSingleObject(threadInfo->handle, INFINITE);
-	GetExitCodeThread(threadInfo->handle, &threadInfo->exitCode);
-	return waitCode;
+	ExitCode waitCodeResult, exitCodeResult, exitCode;
+	waitCodeResult = WaitForSingleObject(threadInfo->handle, INFINITE);
+	exitCodeResult = GetExitCodeThread(threadInfo->handle, &exitCode);
+	if (exitCodeResult) {
+		threadInfo->exitCode = exitCode;
+	}
+
+	return waitCodeResult;
 }
 
-Bool threadCloseHandle(pThreadInfo threadInfo) {
+Bool threadClose(pThreadInfo threadInfo) {
 	return CloseHandle(threadInfo->handle);
 }
 

@@ -2,24 +2,28 @@
 
 #include "LeanTypes.h"
 
-typedef PROCESS_INFORMATION ProcessInfo;
-typedef LPPROCESS_INFORMATION pProcessInfo;
+typedef struct _ProcessInfo ProcessInfo;
+typedef struct _ProcessInfo* pProcessInfo;
 
-typedef STARTUPINFO StartupInfo;
+typedef HANDLE ProcessHandle, ThreadHandle;
+typedef DWORD ProcessId, ThreadId;
 
-typedef HANDLE ProcessHandle;
-typedef DWORD ProcessId;
+struct _ProcessInfo {
+	ProcessHandle processHandle;
+	ProcessId processId;
+	ThreadHandle threadHandle;
+	ThreadId threadId;
+	ExitCode exitCode;
+};
 
-Bool processCreate(pStr commandLine, pProcessInfo pi);
+Bool processCreate(pStr commandLine, pProcessInfo processInfo);
 
-ExitCode processWait(ProcessHandle processHandle);
+ExitCode processWait(pProcessInfo processInfo);
 
 Void processExit(uInt exitCode);
 
-Bool processGetExitCode(ProcessHandle processHandle, pExitCode exitCode);
+Bool processClose(pProcessInfo processInfo);
 
-Bool processCloseHandle(ProcessHandle processHandle);
+Void processGetPseudoHandle(pProcessInfo processInfo);
 
-ProcessHandle processGetPseudoHandle(Void);
-
-ProcessId processGetId(Void);
+Void processGetId(pProcessInfo processInfo);
