@@ -113,6 +113,82 @@ _tprintf(_T("The current ProcessId = <%d>\n"), currentProcess.processId);
 ExitProcess(0);
 ```
 
+
+## Semaphore
+
+### Defining a Semaphore
+
+To define a semaphore, use the `SemaphoreInfo` structure.
+
+```c
+// Define SemaphoreInfo structure
+SemaphoreInfo semaphore;
+```
+
+### Creating a Semaphore
+
+To create a new semaphore, use the `semaphoreCreate()` function and pass it a pointer to a `SemaphoreInfo` structure, along with the name, initial count, and maximum count.
+It returns `Bool`, indicating its success.
+
+```c
+// Define a Semaphore
+SemaphoreInfo semaphoreInfo;
+
+Bool success = semaphoreCreate(&semaphoreInfo, name, initialCount, maximumCount);
+if (!success) {
+    // Handle error
+}
+```
+
+### Waiting for a Semaphore
+
+To wait for a semaphore, use the `semaphoreWait()` function and pass it a pointer to a `SemaphoreInfo` structure.
+It returns a `Dword`, indicating its success.
+
+```c
+// Wait for a semaphore
+Dword result = semaphoreWait(&semaphoreInfo);
+```
+
+### Releasing a Semaphore
+
+To release a semaphore, use the `semaphoreRelease()` function and pass it a pointer to a `SemaphoreInfo` structure, along with the release count and a pointer to store the previous count.
+It returns `Bool`, indicating its success.
+
+```c
+// Release a semaphore
+Bool success = semaphoreRelease(&semaphoreInfo, releaseCount, &previousCount);
+if (!success) {
+    // Handle error
+}
+```
+
+### Opening an Existing Semaphore
+
+To open an existing semaphore, use the `semaphoreOpen()` function and pass it a pointer to a `SemaphoreInfo` structure and the name of the semaphore.
+It returns `Bool`, indicating its success.
+
+```c
+// Open an existing semaphore
+Bool success = semaphoreOpen(&semaphoreInfo, name);
+if (!success) {
+    // Handle error
+}
+```
+
+### Closing a Semaphore
+
+To close a semaphore, use the `semaphoreClose()` function and pass it a pointer to a `SemaphoreInfo` structure.
+It returns `Bool`, indicating its success.
+
+```c
+// Close a semaphore
+Bool success = semaphoreClose(&semaphoreInfo);
+if (!success) {
+    // Handle error
+}
+```
+
 ## Event
 
 ### Defining an Event
