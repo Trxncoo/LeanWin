@@ -22,14 +22,14 @@ ProcessInfo process;
 
 ### Creating a Process
 
-To create a new process, use the `processCreate()` function and pass it the process to create and a pointer to a `ProcessInfo` structure.
+To create a new process, use the `processCreate()` function and pass it a pointer to a `ProcessInfo` structure and the process to create.
 It returns `Bool`, indicating its success.
 
 ```c
 // Define a Process
 ProcessInfo processInfo;
 
-Bool success = processCreate(argv[1], &processInfo);
+Bool success = processCreate(&processInfo, argv[1]);
 if (!success) {
     // Handle error
 }
@@ -94,7 +94,7 @@ processGetId(&processInfo);
 ProcessInfo newProcess, currentProcess;
 Bool processCreated;
 
-processCreated = processCreate(argv[1], &newProcess);
+processCreated = processCreate(&newProces, argv[1]);
 if (!processCreated) {
     _tprintf(_T("Process Creation Failed\n"));
 	processExit(1);
@@ -111,6 +111,82 @@ processGetId(&currentProcess);
 _tprintf(_T("The current ProcessId = <%d>\n"), currentProcess.processId);
 
 ExitProcess(0);
+```
+
+
+## Semaphore
+
+### Defining a Semaphore
+
+To define a semaphore, use the `SemaphoreInfo` structure.
+
+```c
+// Define SemaphoreInfo structure
+SemaphoreInfo semaphore;
+```
+
+### Creating a Semaphore
+
+To create a new semaphore, use the `semaphoreCreate()` function and pass it a pointer to a `SemaphoreInfo` structure, along with the name, initial count, and maximum count.
+It returns `Bool`, indicating its success.
+
+```c
+// Define a Semaphore
+SemaphoreInfo semaphoreInfo;
+
+Bool success = semaphoreCreate(&semaphoreInfo, name, initialCount, maximumCount);
+if (!success) {
+    // Handle error
+}
+```
+
+### Locking a Semaphore
+
+To wait for a semaphore, use the `semaphoreLock()` function and pass it a pointer to a `SemaphoreInfo` structure.
+It returns a `Dword`, indicating its success.
+
+```c
+// Lock a semaphore
+Dword result = semaphoreLock(&semaphoreInfo);
+```
+
+### Unlocking a Semaphore
+
+To release a semaphore, use the `semaphoreUnlock()` function and pass it a pointer to a `SemaphoreInfo` structure, along with the release count and a pointer to store the previous count.
+It returns `Bool`, indicating its success.
+
+```c
+// Unlocking a semaphore
+Bool success = semaphoreUnlock(&semaphoreInfo, releaseCount, &previousCount);
+if (!success) {
+    // Handle error
+}
+```
+
+### Opening an Existing Semaphore
+
+To open an existing semaphore, use the `semaphoreOpen()` function and pass it a pointer to a `SemaphoreInfo` structure and the name of the semaphore.
+It returns `Bool`, indicating its success.
+
+```c
+// Open an existing semaphore
+Bool success = semaphoreOpen(&semaphoreInfo, name);
+if (!success) {
+    // Handle error
+}
+```
+
+### Closing a Semaphore
+
+To close a semaphore, use the `semaphoreClose()` function and pass it a pointer to a `SemaphoreInfo` structure.
+It returns `Bool`, indicating its success.
+
+```c
+// Close a semaphore
+Bool success = semaphoreClose(&semaphoreInfo);
+if (!success) {
+    // Handle error
+}
 ```
 
 ## Event
