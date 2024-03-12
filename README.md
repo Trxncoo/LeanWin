@@ -140,24 +140,24 @@ if (!success) {
 }
 ```
 
-### Waiting for a Semaphore
+### Locking a Semaphore
 
-To wait for a semaphore, use the `semaphoreWait()` function and pass it a pointer to a `SemaphoreInfo` structure.
+To wait for a semaphore, use the `semaphoreLock()` function and pass it a pointer to a `SemaphoreInfo` structure.
 It returns a `Dword`, indicating its success.
 
 ```c
-// Wait for a semaphore
-Dword result = semaphoreWait(&semaphoreInfo);
+// Lock a semaphore
+Dword result = semaphoreLock(&semaphoreInfo);
 ```
 
-### Releasing a Semaphore
+### Unlocking a Semaphore
 
-To release a semaphore, use the `semaphoreRelease()` function and pass it a pointer to a `SemaphoreInfo` structure, along with the release count and a pointer to store the previous count.
+To release a semaphore, use the `semaphoreUnlock()` function and pass it a pointer to a `SemaphoreInfo` structure, along with the release count and a pointer to store the previous count.
 It returns `Bool`, indicating its success.
 
 ```c
-// Release a semaphore
-Bool success = semaphoreRelease(&semaphoreInfo, releaseCount, &previousCount);
+// Unlocking a semaphore
+Bool success = semaphoreUnlock(&semaphoreInfo, releaseCount, &previousCount);
 if (!success) {
     // Handle error
 }
