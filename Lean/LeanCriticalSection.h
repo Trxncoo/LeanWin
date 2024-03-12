@@ -2,17 +2,8 @@
 
 #include "LeanTypes.h"
 
-typedef CRITICAL_SECTION CriticalSectionHandle;
-
-typedef struct _CriticalSectionInfo CriticalSectionInfo;
-typedef struct _CriticalSectionInfo* pCriticalSectionInfo;
-
-struct _CriticalSectionInfo {
-	CriticalSectionHandle handle;
-	Bool state;
-};
-
-Void criticalSectionDebug(pCriticalSectionInfo criticalSectionInfo);
+typedef CRITICAL_SECTION CriticalSectionInfo;
+typedef LPCRITICAL_SECTION pCriticalSectionInfo;
 
 Void criticalSectionCreate(pCriticalSectionInfo criticalSectionInfo);
 

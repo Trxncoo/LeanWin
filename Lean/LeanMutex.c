@@ -1,11 +1,5 @@
 #include "LeanMutex.h"
 
-Void mutexDebug(pMutexInfo mutexInfo) {
-#ifdef LEAN_DEBUG
-	_ftprintf_s(stderr, _T("<Mutex Debug>\n\tName: <%s>\n\tState: <%d>\n"), mutexInfo->name, mutexInfo->state);
-#endif
-}
-
 Bool mutexCreate(pMutexInfo mutexInfo, pStr name) {
 	MutexHandle mutexHandle;
 
@@ -15,7 +9,28 @@ Bool mutexCreate(pMutexInfo mutexInfo, pStr name) {
 	}
 
 	mutexInfo->handle = mutexHandle;
-	mutexInfo->state = 0;
+	_tcscpy_s(mutexInfo->name, MAX_PATH - 1, name);
+
+	return 1;
+}
+
+Dword mutexLock(pMutexInfo mutexInfo) {
+	return WaitForSingleObject(mutexInfo->handle, INFINITE);
+}
+
+Bool mutexUnlock(pMutexInfo mutexInfo) {
+	return ReleaseMutex(mutexInfo->handle);
+}
+
+Bool mutexOpen(pMutexInfo mutexInfo, pStr name) {
+	MutexHandle mutexHandle;
+
+	mutexHandle = OpenMutex(MUTEX_ALL_ACCESS, FALSE, name);
+	if (mutexHandle == NULL) {
+		return 0;
+	}
+
+	mutexInfo->handle = mutexHandle;
 	_tcscpy_s(mutexInfo->name, MAX_PATH - 1, name);
 
 	return 1;
@@ -23,14 +38,4 @@ Bool mutexCreate(pMutexInfo mutexInfo, pStr name) {
 
 Bool mutexClose(pMutexInfo mutexInfo) {
 	return CloseHandle(mutexInfo->handle);
-}
-
-Void mutexLock(pMutexInfo mutexInfo) {
-	mutexInfo->state = 1;
-	WaitForSingleObject(mutexInfo->handle, INFINITE);
-}
-
-Void mutexUnlock(pMutexInfo mutexInfo) {
-	mutexInfo->state = 0;
-	ReleaseMutex(mutexInfo->handle);
 }

@@ -12,6 +12,9 @@ typedef TCHAR Str;
 
 typedef INT Int;
 
+typedef LONG Long;
+typedef LPLONG pLong;
+
 typedef DWORD Dword, ExitCode;
 typedef LPDWORD pExitCode;
 

@@ -10,7 +10,6 @@ typedef HANDLE EventHandle;
 struct _EventInfo {
 	Str name[MAX_PATH];
 	EventHandle handle;
-	Bool state;
 };
 
 Bool eventCreate(pEventInfo eventInfo, Bool initialState, Bool manualReset, pStr name);

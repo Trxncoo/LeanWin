@@ -9,32 +9,17 @@ Bool eventCreate(pEventInfo eventInfo, Bool initialState, Bool manualReset, pStr
 	}
 
 	eventInfo->handle = eventHandle;
-	eventInfo->state = initialState;
 	_tcscpy_s(eventInfo->name, MAX_PATH - 1, name);
 
 	return 1;
 }
 
-Bool eventSet(pEventInfo eventInfo) {
-	Bool setResult;
-	
-	setResult = SetEvent(eventInfo->handle);
-	if (setResult) {
-		eventInfo->state = setResult;
-	}
-	
-	return setResult;
+Bool eventSet(pEventInfo eventInfo) {	
+	return SetEvent(eventInfo->handle);
 }
 
 Bool eventReset(pEventInfo eventInfo) {
-	Bool resetResult;
-
-	resetResult = ResetEvent(eventInfo->handle);
-	if (resetResult) {
-		eventInfo->state = resetResult;
-	}
-
-	return resetResult;
+	return ResetEvent(eventInfo->handle);
 }
 
 Bool eventClose(pEventInfo eventInfo) {

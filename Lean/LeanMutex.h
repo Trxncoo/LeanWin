@@ -10,15 +10,14 @@ typedef struct _MutexInfo* pMutexInfo;
 struct _MutexInfo {
 	Str name[MAX_PATH];
 	MutexHandle handle;
-	Bool state;
 };
-
-Void mutexDebug(pMutexInfo mutexInfo);
 
 Bool mutexCreate(pMutexInfo mutexInfo, pStr name);
 
+Dword mutexLock(pMutexInfo mutexInfo);
+
+Bool mutexUnlock(pMutexInfo mutexInfo);
+
+Bool mutexOpen(pMutexInfo mutexInfo, pStr name);
+
 Bool mutexClose(pMutexInfo mutexInfo);
-
-Void mutexLock(pMutexInfo mutexInfo);
-
-Void mutexUnlock(pMutexInfo mutexInfo);

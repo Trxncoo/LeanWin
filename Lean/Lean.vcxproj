@@ -137,7 +137,10 @@
     <ClCompile Include="LeanMutex.c" />
     <ClCompile Include="LeanProcesses.c" />
     <ClCompile Include="LeanRegistry.c" />
+    <ClCompile Include="LeanSemaphore.c" />
     <ClCompile Include="LeanThreads.c" />
+    <ClCompile Include="LeanTime.c" />
+    <ClCompile Include="LeanWaitableTimer.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
@@ -147,8 +150,11 @@
     <ClInclude Include="LeanMutex.h" />
     <ClInclude Include="LeanProcesses.h" />
     <ClInclude Include="LeanRegistry.h" />
+    <ClInclude Include="LeanSemaphore.h" />
+    <ClInclude Include="LeanTime.h" />
     <ClInclude Include="LeanTypes.h" />
     <ClInclude Include="LeanThreads.h" />
+    <ClInclude Include="LeanWaitableTimer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -39,6 +39,15 @@
     <ClCompile Include="LeanCriticalSection.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LeanSemaphore.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LeanTime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LeanWaitableTimer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lean.h">
@@ -63,6 +72,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LeanCriticalSection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LeanSemaphore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LeanWaitableTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LeanTime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
